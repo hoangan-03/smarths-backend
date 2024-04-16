@@ -7,48 +7,52 @@ import (
 )
 
 type Account struct {
-	Acc_id   int    `json:"acc_id"`
 	Username string `json:"username"`
 	Password string `json:"password"`
+	Acc_id   int    `json:"acc_id"`
 }
 
 type Room struct {
-	Room_id int `json:"room_id"`
-	Acc_id  int `json:"acc_id"`
+	Room_id   int    `json:"room_id"`
+	Acc_id    string `json:"acc_id"`
+	Room_name string `json:"room_name"`
+	Mode      string `json:"mode"`
 }
 
 type Device struct {
-	Sens_id int    `json:"aens_id"`
-	Acc_id  int    `json:"acc_id"`
-	Status  string `json:"status"`
+	Dev_id   string `json:"dev_id"`
+	Room_id  int    `json:"room_id"`
+	Category string `json:"category"`
 }
 
 type Record struct {
-	Rec_id  int    `json:"rec_id"`
-	Sens_id int    `json:"sens_id"`
-	Value   string `json:"value"`
+	Rec_id    int       `json:"rec_id"`
+	Dev_id    string    `json:"dev_id"`
+	Value     string    `json:"value"`
+	Status    string    `json:"status"` // Changed from time.Time to string
+	Timestamp time.Time `json:"timestamp"`
 }
 
 type Booking struct {
-	Book_id int       `json:"book_id"`
-	Acc_id  int       `json:"acc_id"`
-	Day     int       `json:"day"`
-	Month   int       `json:"month"`
-	Time    time.Time `json:"time"`
+	Book_id     int       `json:"book_id"`
+	Room_id     int       `json:"room_id"`
+	Time        time.Time `json:"time"`
+	Notes       string    `json:"notes"`
+	Remind_time time.Time `json:"remind_time"`
 }
 
-type Reminder struct {
-	Rem_id      int       `json:"rem_id"`
-	Time_on     int       `json:"time_on"`
-	Remain_time time.Time `json:"remain_time"`
-	Acc_id      int       `json:"acc_id"`
-	Book_id     int       `json:"book_id"`
-	Notes       string    `json:"notes"`
+type Criteria struct {
+	Crit_id   string    `json:"crit_id"`
+	Dev_id    string `json:"dev_id"`
+	Threshold string `json:"threshold"`
+	Action    string `json:"action"`
 }
 
 type Controlling struct {
-	Cmd_id int    `json:"cmd_id"`
-	Acc_id int    `json:"acc_id"`
-	Status string `json:"status"`
-	Action string `json:"action"`
+	Ctrl_id   int       `json:"ctrl_id"`
+	Dev_id    string    `json:"dev_id"`
+	Room_id   int       `json:"room_id"`
+	Action    string    `json:"action"`
+	Ctrl_mode string    `json:"ctrl_mode"`
+	Timestamp time.Time `json:"timestamp"`
 }

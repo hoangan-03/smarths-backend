@@ -9,7 +9,7 @@ import (
 )
 
 func DBSet() *sql.DB {
-	connStr := "postgresql://<username>:<password>@<database_ip>/todos?sslmode=disable"
+	connStr := "postgresql://homeowner:yevdpqFNRVXGXOfm9sGjPg@home-stay-6549.6xw.aws-ap-southeast-1.cockroachlabs.cloud:26257/homestay?sslmode=verify-full"
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
@@ -25,44 +25,3 @@ func DBSet() *sql.DB {
 }
 
 var DB *sql.DB = DBSet()
-
-func UserData(tableName string) {
-	rows, err := DB.Query("SELECT * FROM " + tableName)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		// Scan the row into variables here
-		// For example:
-		// var id int
-		// var name string
-		// err = rows.Scan(&id, &name)
-		// if err != nil {
-		// 	log.Fatal(err)
-		// }
-		// fmt.Println(id, name)
-	}
-}
-
-func ProductData(tableName string) {
-	rows, err := DB.Query("SELECT * FROM " + tableName)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		// Scan the row into variables here
-		// For example:
-		// var id int
-		// var name string
-		// var price float64
-		// err = rows.Scan(&id, &name, &price)
-		// if err != nil {
-		// 	log.Fatal(err)
-		// }
-		// fmt.Println(id, name, price)
-	}
-}
