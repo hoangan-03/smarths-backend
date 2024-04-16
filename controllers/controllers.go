@@ -30,7 +30,7 @@ func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
-func SignUp() gin.HandlerFunc {
+func Register() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var account models.Account
 		if err := c.BindJSON(&account); err != nil {
