@@ -80,7 +80,7 @@ func SignIn() gin.HandlerFunc {
 			return
 		}
 
-		// Remove the password from the returned account before sending it to the client
+		
 		returnedAccount.Password = ""
 
 		c.JSON(http.StatusOK, gin.H{"message": "Successfully signed in", "user": returnedAccount})
