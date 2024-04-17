@@ -13,23 +13,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	_ "github.com/lib/pq"
-	"golang.org/x/crypto/bcrypt"
 )
 
 var db *sql.DB = database.DBSet()
 var Validate = validator.New()
 
-func HashPassword(password string) string {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	if err != nil {
-		log.Panic(err)
-	}
-	return string(bytes)
-}
-func CheckPasswordHash(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
-}
 func Register() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var account models.Account
@@ -54,13 +42,11 @@ func Register() gin.HandlerFunc {
 			return
 		}
 
-		password := HashPassword(account.Password)
-		account.Password = password
-
-		_, err = db.ExecContext(ctx, "INSERT INTO account (username, password) VALUES ($1, $2)",
-			account.Username, account.Password)
+		_, err = db.ExecContext(ctx, "INSERT INTO account (acc_id, username, password) VALUES ($1, $2, $3)",
+			account.Acc_id, account.Username, account.Password)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong. Account not created"})
+			log.Printf("Error: %v", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
@@ -79,21 +65,25 @@ func SignIn() gin.HandlerFunc {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
 
-		row := db.QueryRowContext(ctx, "SELECT password FROM account WHERE username = $1", account.Username)
-		var storedPassword string
-		err := row.Scan(&storedPassword)
+		row := db.QueryRowContext(ctx, "SELECT * FROM account WHERE username = $1", account.Username)
+		var returnedAccount models.Account
+		err := row.Scan(&returnedAccount.Acc_id, &returnedAccount.Username, &returnedAccount.Password)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Username or password is incorrect"})
+			log.Printf("Error: %v", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
-		passwordIsValid := CheckPasswordHash(account.Password, storedPassword)
+		passwordIsValid := account.Password == returnedAccount.Password
 		if !passwordIsValid {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Username or password is incorrect"})
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"message": "Successfully signed in"})
+		// Remove the password from the returned account before sending it to the client
+		returnedAccount.Password = ""
+
+		c.JSON(http.StatusOK, gin.H{"message": "Successfully signed in", "user": returnedAccount})
 	}
 }
 

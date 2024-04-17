@@ -29,7 +29,7 @@ type Record struct {
 	Rec_id    int       `json:"rec_id"`
 	Dev_id    string    `json:"dev_id"`
 	Value     string    `json:"value"`
-	Status    string    `json:"status"` // Changed from time.Time to string
+	Status    string    `json:"status"` 
 	Timestamp time.Time `json:"timestamp"`
 }
 
