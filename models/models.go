@@ -9,7 +9,7 @@ import (
 type Account struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
-	Acc_id   int    `json:"acc_id"`
+	Acc_id   string `json:"acc_id"`
 }
 
 type Room struct {
@@ -29,7 +29,7 @@ type Record struct {
 	Rec_id    int       `json:"rec_id"`
 	Dev_id    string    `json:"dev_id"`
 	Value     string    `json:"value"`
-	Status    string    `json:"status"` 
+	Status    string    `json:"status"`
 	Timestamp time.Time `json:"timestamp"`
 }
 
@@ -42,7 +42,7 @@ type Booking struct {
 }
 
 type Criteria struct {
-	Crit_id   string    `json:"crit_id"`
+	Crit_id   string `json:"crit_id"`
 	Dev_id    string `json:"dev_id"`
 	Threshold string `json:"threshold"`
 	Action    string `json:"action"`

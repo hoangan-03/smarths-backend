@@ -79,8 +79,6 @@ func SignIn() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Username or password is incorrect"})
 			return
 		}
-
-		
 		returnedAccount.Password = ""
 
 		c.JSON(http.StatusOK, gin.H{"message": "Successfully signed in", "user": returnedAccount})
