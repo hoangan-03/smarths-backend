@@ -71,7 +71,7 @@ func SignIn() gin.HandlerFunc {
 
 		row := db.QueryRowContext(ctx, "SELECT * FROM account WHERE username = $1", account.Username)
 		var returnedAccount models.Account
-		err := row.Scan(&returnedAccount.Acc_id, &returnedAccount.Username, &returnedAccount.Password, &returnedAccount.Key)
+		err := row.Scan(&returnedAccount.Acc_id, &returnedAccount.Username, &returnedAccount.Password)
 		if err != nil {
 			log.Printf("Error: %v", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
