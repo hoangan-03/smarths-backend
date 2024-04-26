@@ -47,8 +47,8 @@ func Register() gin.HandlerFunc {
 			return
 		}
 
-		_, err = db.ExecContext(ctx, "INSERT INTO account (acc_id, username, password, key) VALUES ($1, $2, $3, $4)",
-			account.Acc_id, account.Username, account.Password, account.Key)
+		_, err = db.ExecContext(ctx, "INSERT INTO account (username, password, acc_id, key) VALUES ($1, $2, $3, $4)",
+			account.Username, account.Password, account.Acc_id, account.Key)
 		if err != nil {
 			log.Printf("Error: %v", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -71,7 +71,7 @@ func SignIn() gin.HandlerFunc {
 
 		row := db.QueryRowContext(ctx, "SELECT * FROM account WHERE username = $1", account.Username)
 		var returnedAccount models.Account
-		err := row.Scan(&returnedAccount.Acc_id, &returnedAccount.Username, &returnedAccount.Password)
+		err := row.Scan(&returnedAccount.Username, &returnedAccount.Password, &returnedAccount.Acc_id, &returnedAccount.Key)
 		if err != nil {
 			log.Printf("Error: %v", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
