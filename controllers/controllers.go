@@ -26,6 +26,11 @@ func Register() gin.HandlerFunc {
 			return
 		}
 
+		if account.Key != "randomkey" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid key"})
+			return
+		}
+
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
 
@@ -42,8 +47,8 @@ func Register() gin.HandlerFunc {
 			return
 		}
 
-		_, err = db.ExecContext(ctx, "INSERT INTO account (acc_id, username, password) VALUES ($1, $2, $3)",
-			account.Acc_id, account.Username, account.Password)
+		_, err = db.ExecContext(ctx, "INSERT INTO account (acc_id, username, password, key) VALUES ($1, $2, $3, $4)",
+			account.Acc_id, account.Username, account.Password, account.Key)
 		if err != nil {
 			log.Printf("Error: %v", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -51,7 +56,6 @@ func Register() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusCreated, gin.H{"message": "Successfully signed up"})
-
 	}
 }
 func SignIn() gin.HandlerFunc {
@@ -67,7 +71,7 @@ func SignIn() gin.HandlerFunc {
 
 		row := db.QueryRowContext(ctx, "SELECT * FROM account WHERE username = $1", account.Username)
 		var returnedAccount models.Account
-		err := row.Scan(&returnedAccount.Acc_id, &returnedAccount.Username, &returnedAccount.Password)
+		err := row.Scan(&returnedAccount.Acc_id, &returnedAccount.Username, &returnedAccount.Password, &returnedAccount.Key)
 		if err != nil {
 			log.Printf("Error: %v", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

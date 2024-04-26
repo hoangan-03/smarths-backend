@@ -10,6 +10,7 @@ type Account struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Acc_id   string `json:"acc_id"`
+	Key      string `json:"key"`
 }
 
 type Room struct {
@@ -36,9 +37,10 @@ type Record struct {
 type Booking struct {
 	Book_id     int       `json:"book_id"`
 	Room_id     int       `json:"room_id"`
-	Time        time.Time `json:"time"`
+	Start_time  time.Time `json:"start_time"`
 	Notes       string    `json:"notes"`
 	Remind_time time.Time `json:"remind_time"`
+	End_time    time.Time `json:"end_time"`
 }
 
 type Criteria struct {
