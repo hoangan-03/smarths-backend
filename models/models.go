@@ -9,7 +9,7 @@ import (
 type Account struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
-	Acc_id   string `json:"acc_id"`
+	Acc_id   int    `json:"acc_id"`
 	Key      string `json:"key"`
 }
 

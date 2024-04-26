@@ -22,12 +22,12 @@ func Register() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var account models.Account
 		if err := c.BindJSON(&account); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body", "details": err.Error()})
 			return
 		}
 
 		if account.Key != "randomkey" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid key"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid key", "details": "Key must be 'randomkey'"})
 			return
 		}
 
@@ -47,7 +47,7 @@ func Register() gin.HandlerFunc {
 			return
 		}
 
-		_, err = db.ExecContext(ctx, "INSERT INTO account (username, password, acc_id, key) VALUES ($1, $2, $3, $4)",
+		_, err = db.ExecContext(ctx, "INSERT INTO account (username, password,acc_id, key) VALUES ($1, $2, $3, $4)",
 			account.Username, account.Password, account.Acc_id, account.Key)
 		if err != nil {
 			log.Printf("Error: %v", err)
