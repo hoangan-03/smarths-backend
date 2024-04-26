@@ -13,3 +13,4 @@ func Routes(router *gin.Engine) {
 	router.POST("/register", controllers.Register())
 	router.POST("/signin", controllers.SignIn())
 }
+
