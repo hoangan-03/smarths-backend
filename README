@@ -1,0 +1,32 @@
+# SmartHS Backend
+
+This is the backend for the SmartHS project. It's written in Go and uses the Gin framework for handling HTTP requests.
+
+## Project Structure
+
+- `controllers/`: Contains the HTTP handlers for the routes.
+- `database/`: Contains the code for setting up the database.
+- `models/`: Contains the data models used in the project.
+- `routes/`: Contains the code for setting up the routes.
+- `tokens/`: Contains the code for handling tokens.
+- `main.go`: The entry point for the application.
+
+## Setup
+
+1. Clone the repository.
+2. Run `go mod tidy` to download the dependencies.
+3. Run `go run main.go` to start the server.
+
+## Endpoints
+
+- `POST /register`: Register a new user.
+- `POST /signin`: Sign in a user.
+- `GET /record/:category`: Get a record by category. The categories can be temperature, light, humidity, or humandetect.
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
