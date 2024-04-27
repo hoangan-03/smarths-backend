@@ -23,10 +23,6 @@ This is the backend for the SmartHS project. It's written in Go and uses the Gin
 - `POST /signin`: Sign in a user.
 - `GET /record/:category`: Get a record by category. The categories can be temperature, light, humidity, or humandetect.
 
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
