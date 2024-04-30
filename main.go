@@ -16,6 +16,7 @@ func main() {
 	}
 
 	router := gin.New()
+	gin.SetMode(gin.ReleaseMode)
 	router.Use(cors.Default())
 	router.Use(gin.Logger())
 	routes.Routes(router)
