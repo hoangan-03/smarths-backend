@@ -57,4 +57,5 @@ type Controlling struct {
 	Action    string    `json:"action"`
 	Ctrl_mode string    `json:"ctrl_mode"`
 	Timestamp time.Time `json:"timestamp"`
+	Isviewed  bool      `json:"isviewed"`
 }

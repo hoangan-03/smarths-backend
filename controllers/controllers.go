@@ -1,14 +1,13 @@
 package controllers
 
 import (
+	"backend/database"
+	"backend/models"
 	"context"
 	"database/sql"
 	"log"
 	"net/http"
 	"time"
-
-	"backend/database"
-	"backend/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -121,5 +120,26 @@ func GetRecordByCategory(category string) gin.HandlerFunc {
 			return
 		}
 		c.JSON(200, recordList)
+	}
+}
+func Controlling() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var controlling models.Controlling
+		if err := c.ShouldBindJSON(&controlling); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		query := `INSERT INTO Controlling (Dev_id, Room_id, Action, Ctrl_mode, Timestamp, Isviewed) VALUES ($1, $2, $3, $4, $5, $6)`
+		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+
+		_, err := db.ExecContext(ctx, query, controlling.Dev_id, controlling.Room_id, controlling.Action, controlling.Ctrl_mode, controlling.Timestamp, controlling.Isviewed)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"data": controlling})
 	}
 }
