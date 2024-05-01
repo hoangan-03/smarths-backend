@@ -14,4 +14,6 @@ func Routes(router *gin.Engine) {
 	router.POST("/register", controllers.Register())
 	router.POST("/signin", controllers.SignIn())
 	router.POST("/controlling", controllers.Controlling())
+	router.GET("/get_nofications", controllers.GetNofications())
+	router.PUT("/update_isviewed/:ctrl_id", controllers.UpdateIsViewed())
 }

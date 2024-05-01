@@ -7,6 +7,7 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -141,5 +142,61 @@ func Controlling() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, gin.H{"data": controlling})
+	}
+}
+func GetNofications() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		query := `SELECT Ctrl_id, Action, Ctrl_mode, Timestamp, Isviewed FROM Controlling`
+		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+
+		rows, err := db.QueryContext(ctx, query)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		defer rows.Close()
+
+		var result []models.Controlling
+		for rows.Next() {
+			var controlling models.Controlling
+			err = rows.Scan(&controlling.Ctrl_id, &controlling.Action, &controlling.Ctrl_mode, &controlling.Timestamp, &controlling.Isviewed)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			result = append(result, controlling)
+		}
+
+		if err = rows.Err(); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"data": result})
+	}
+}
+
+func UpdateIsViewed() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ctrl_id, err := strconv.ParseInt(c.Param("ctrl_id"), 10, 64) // convert ctrl_id to int64
+		if err != nil {
+			log.Println("Error parsing ctrl_id:", err) // log the error
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ctrl_id"})
+			return
+		}
+
+		query := `UPDATE Controlling SET Isviewed = true WHERE Ctrl_id = $1`
+		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+
+		_, err = db.ExecContext(ctx, query, ctrl_id)
+		if err != nil {
+			log.Println("Error executing query:", err) // log the error
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "Row updated successfully"})
 	}
 }
