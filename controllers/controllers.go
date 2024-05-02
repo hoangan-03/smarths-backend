@@ -192,7 +192,7 @@ func UpdateIsViewed() gin.HandlerFunc {
 
 		_, err = db.ExecContext(ctx, query, ctrl_id)
 		if err != nil {
-			log.Println("Error executing query:", err) // log the error
+			log.Println("Error executing query:", err) 
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
