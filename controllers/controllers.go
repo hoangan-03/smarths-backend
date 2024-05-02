@@ -192,11 +192,33 @@ func UpdateIsViewed() gin.HandlerFunc {
 
 		_, err = db.ExecContext(ctx, query, ctrl_id)
 		if err != nil {
-			log.Println("Error executing query:", err) 
+			log.Println("Error executing query:", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
 		c.JSON(http.StatusOK, gin.H{"message": "Row updated successfully"})
+	}
+}
+func AddBooking() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var booking models.Booking
+		if err := c.ShouldBindJSON(&booking); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		query := `INSERT INTO booking (book_id, room_id, start_time, notes, remind_time, end_time) VALUES ($1, $2, $3, $4, $5, $6)`
+		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+
+		_, err := db.ExecContext(ctx, query, booking.Book_id, booking.Room_id, booking.Start_time, booking.Notes, booking.Remind_time, booking.End_time)
+		if err != nil {
+			log.Println("Error executing query:", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "Booking added successfully", "booking": booking})
 	}
 }
