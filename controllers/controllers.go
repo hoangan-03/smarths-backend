@@ -267,3 +267,37 @@ func ModifyBooking() gin.HandlerFunc {
 		c.JSON(http.StatusOK, gin.H{"message": "Booking modified successfully", "booking": booking})
 	}
 }
+func GetBookings() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		query := `SELECT * FROM booking`
+		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+
+		rows, err := db.QueryContext(ctx, query)
+		if err != nil {
+			log.Println("Error executing query:", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		defer rows.Close()
+
+		var bookings []models.Booking
+		for rows.Next() {
+			var booking models.Booking
+			if err := rows.Scan(&booking.Book_id, &booking.Room_id, &booking.Start_time, &booking.Notes, &booking.Remind_time, &booking.End_time); err != nil {
+				log.Println("Error scanning row:", err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			bookings = append(bookings, booking)
+		}
+
+		if err := rows.Err(); err != nil {
+			log.Println("Error with rows:", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"bookings": bookings})
+	}
+}

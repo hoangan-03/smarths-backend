@@ -19,5 +19,6 @@ func Routes(router *gin.Engine) {
 	router.POST("/add_booking", controllers.AddBooking())
 	router.DELETE("/delete_booking/:book_id", controllers.DeleteBooking())
 	router.PUT("/modify_booking/:book_id", controllers.ModifyBooking())
+	router.GET("/get_bookings", controllers.GetBookings())
 
 }
