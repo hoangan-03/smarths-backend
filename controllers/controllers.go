@@ -208,7 +208,7 @@ func AddBooking() gin.HandlerFunc {
 			return
 		}
 
-		query := `INSERT INTO booking (id, room_id, start_date, text, remind_date, end_date) VALUES ($1, $2, $3, $4, $5, $6)`
+		query := `INSERT INTO booking (id, room_id, start_date, text, remind_time, end_date) VALUES ($1, $2, $3, $4, $5, $6)`
 		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
 
