@@ -208,11 +208,11 @@ func AddBooking() gin.HandlerFunc {
 			return
 		}
 
-		query := `INSERT INTO booking (book_id, room_id, start_time, notes, remind_time, end_time) VALUES ($1, $2, $3, $4, $5, $6)`
+		query := `INSERT INTO booking (id, room_id, start_time, notes, remind_time, end_time) VALUES ($1, $2, $3, $4, $5, $6)`
 		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
 
-		_, err := db.ExecContext(ctx, query, booking.Book_id, booking.Room_id, booking.Start_date, booking.Text, booking.Remind_time, booking.End_date)
+		_, err := db.ExecContext(ctx, query, booking.Id, booking.Room_id, booking.Start_date, booking.Text, booking.Remind_time, booking.End_date)
 		if err != nil {
 			log.Println("Error executing query:", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -223,17 +223,17 @@ func AddBooking() gin.HandlerFunc {
 	}
 }
 
-// DeleteBooking deletes a booking with the given book_id
-// DeleteBooking deletes a booking with the given book_id
+// DeleteBooking deletes a booking with the given id
+// DeleteBooking deletes a booking with the given id
 func DeleteBooking() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		book_id := c.Param("book_id")
+		id := c.Param("id")
 
-		query := `DELETE FROM booking WHERE book_id = $1`
+		query := `DELETE FROM booking WHERE id = $1`
 		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
 
-		_, err := db.ExecContext(ctx, query, book_id)
+		_, err := db.ExecContext(ctx, query, id)
 		if err != nil {
 			log.Println("Error executing query:", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -244,7 +244,7 @@ func DeleteBooking() gin.HandlerFunc {
 	}
 }
 
-// ModifyBooking modifies a booking with the given book_id
+// ModifyBooking modifies a booking with the given id
 func ModifyBooking() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var booking models.Booking
@@ -253,11 +253,11 @@ func ModifyBooking() gin.HandlerFunc {
 			return
 		}
 
-		query := `UPDATE booking SET room_id = $1, start_time = $2, notes = $3, remind_time = $4, end_time = $5 WHERE book_id = $6`
+		query := `UPDATE booking SET room_id = $1, start_time = $2, notes = $3, remind_time = $4, end_time = $5 WHERE id = $6`
 		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
 
-		_, err := db.ExecContext(ctx, query, booking.Room_id, booking.Start_date, booking.Text, booking.Remind_time, booking.End_date, booking.Book_id)
+		_, err := db.ExecContext(ctx, query, booking.Room_id, booking.Start_date, booking.Text, booking.Remind_time, booking.End_date, booking.Id)
 		if err != nil {
 			log.Println("Error executing query:", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -284,7 +284,7 @@ func GetBookings() gin.HandlerFunc {
 		var bookings []models.Booking
 		for rows.Next() {
 			var booking models.Booking
-			if err := rows.Scan(&booking.Book_id, &booking.Room_id, &booking.Start_date, &booking.Text, &booking.Remind_time, &booking.End_date); err != nil {
+			if err := rows.Scan(&booking.Id, &booking.Room_id, &booking.Start_date, &booking.Text, &booking.Remind_time, &booking.End_date); err != nil {
 				log.Println("Error scanning row:", err)
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 				return

@@ -35,7 +35,7 @@ type Record struct {
 }
 
 type Booking struct {
-	Book_id     int       `json:"book_id"`
+	Id          int       `json:"id"`
 	Room_id     int       `json:"room_id"`
 	Start_date  time.Time `json:"start_date"`
 	Text        string    `json:"text"`
