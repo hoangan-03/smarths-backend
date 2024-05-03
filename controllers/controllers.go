@@ -208,7 +208,7 @@ func AddBooking() gin.HandlerFunc {
 			return
 		}
 
-		query := `INSERT INTO booking (id, room_id, start_time, notes, remind_time, end_time) VALUES ($1, $2, $3, $4, $5, $6)`
+		query := `INSERT INTO booking (id, room_id, start_date, text, remind_date, end_date) VALUES ($1, $2, $3, $4, $5, $6)`
 		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
 
@@ -253,7 +253,7 @@ func ModifyBooking() gin.HandlerFunc {
 			return
 		}
 
-		query := `UPDATE booking SET room_id = $1, start_time = $2, notes = $3, remind_time = $4, end_time = $5 WHERE id = $6`
+		query := `UPDATE booking SET room_id = $1, start_date = $2, text = $3, remind_time = $4, end_date = $5 WHERE id = $6`
 		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
 
