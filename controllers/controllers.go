@@ -222,3 +222,48 @@ func AddBooking() gin.HandlerFunc {
 		c.JSON(http.StatusOK, gin.H{"message": "Booking added successfully", "booking": booking})
 	}
 }
+
+// DeleteBooking deletes a booking with the given book_id
+// DeleteBooking deletes a booking with the given book_id
+func DeleteBooking() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		book_id := c.Param("book_id")
+
+		query := `DELETE FROM booking WHERE book_id = $1`
+		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+
+		_, err := db.ExecContext(ctx, query, book_id)
+		if err != nil {
+			log.Println("Error executing query:", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "Booking deleted successfully"})
+	}
+}
+
+// ModifyBooking modifies a booking with the given book_id
+func ModifyBooking() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var booking models.Booking
+		if err := c.ShouldBindJSON(&booking); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		query := `UPDATE booking SET room_id = $1, start_time = $2, notes = $3, remind_time = $4, end_time = $5 WHERE book_id = $6`
+		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+
+		_, err := db.ExecContext(ctx, query, booking.Room_id, booking.Start_time, booking.Notes, booking.Remind_time, booking.End_time, booking.Book_id)
+		if err != nil {
+			log.Println("Error executing query:", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "Booking modified successfully", "booking": booking})
+	}
+}

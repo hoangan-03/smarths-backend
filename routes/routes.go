@@ -17,4 +17,7 @@ func Routes(router *gin.Engine) {
 	router.GET("/get_nofications", controllers.GetNofications())
 	router.PUT("/update_isviewed/:ctrl_id", controllers.UpdateIsViewed())
 	router.POST("/add_booking", controllers.AddBooking())
+	router.DELETE("/delete_booking/:book_id", controllers.DeleteBooking())
+	router.PUT("/modify_booking/:book_id", controllers.ModifyBooking())
+
 }
