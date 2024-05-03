@@ -27,7 +27,7 @@ type Device struct {
 }
 
 type Record struct {
-	Rec_id    int       `json:"rec_id"`
+	Rec_id    string    `json:"rec_id"`
 	Dev_id    string    `json:"dev_id"`
 	Value     string    `json:"value"`
 	Status    string    `json:"status"`
@@ -37,10 +37,10 @@ type Record struct {
 type Booking struct {
 	Book_id     int       `json:"book_id"`
 	Room_id     int       `json:"room_id"`
-	Start_time  time.Time `json:"start_time"`
-	Notes       string    `json:"notes"`
+	Start_date  time.Time `json:"start_date"`
+	Text        string    `json:"text"`
 	Remind_time time.Time `json:"remind_time"`
-	End_time    time.Time `json:"end_time"`
+	End_date    time.Time `json:"end_date"`
 }
 
 type Criteria struct {

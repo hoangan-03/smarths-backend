@@ -212,7 +212,7 @@ func AddBooking() gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
 
-		_, err := db.ExecContext(ctx, query, booking.Book_id, booking.Room_id, booking.Start_time, booking.Notes, booking.Remind_time, booking.End_time)
+		_, err := db.ExecContext(ctx, query, booking.Book_id, booking.Room_id, booking.Start_date, booking.Text, booking.Remind_time, booking.End_date)
 		if err != nil {
 			log.Println("Error executing query:", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -257,7 +257,7 @@ func ModifyBooking() gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
 
-		_, err := db.ExecContext(ctx, query, booking.Room_id, booking.Start_time, booking.Notes, booking.Remind_time, booking.End_time, booking.Book_id)
+		_, err := db.ExecContext(ctx, query, booking.Room_id, booking.Start_date, booking.Text, booking.Remind_time, booking.End_date, booking.Book_id)
 		if err != nil {
 			log.Println("Error executing query:", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -284,7 +284,7 @@ func GetBookings() gin.HandlerFunc {
 		var bookings []models.Booking
 		for rows.Next() {
 			var booking models.Booking
-			if err := rows.Scan(&booking.Book_id, &booking.Room_id, &booking.Start_time, &booking.Notes, &booking.Remind_time, &booking.End_time); err != nil {
+			if err := rows.Scan(&booking.Book_id, &booking.Room_id, &booking.Start_date, &booking.Text, &booking.Remind_time, &booking.End_date); err != nil {
 				log.Println("Error scanning row:", err)
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 				return
