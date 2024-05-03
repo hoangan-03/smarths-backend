@@ -16,4 +16,5 @@ func Routes(router *gin.Engine) {
 	router.POST("/controlling", controllers.Controlling())
 	router.GET("/get_nofications", controllers.GetNofications())
 	router.PUT("/update_isviewed/:ctrl_id", controllers.UpdateIsViewed())
+	router.POST("/add_booking", controllers.AddBooking())
 }
