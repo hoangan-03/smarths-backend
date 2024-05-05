@@ -223,8 +223,7 @@ func AddBooking() gin.HandlerFunc {
 	}
 }
 
-// DeleteBooking deletes a booking with the given id
-// DeleteBooking deletes a booking with the given id
+
 func DeleteBooking() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")
@@ -244,7 +243,6 @@ func DeleteBooking() gin.HandlerFunc {
 	}
 }
 
-// ModifyBooking modifies a booking with the given id
 func ModifyBooking() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var booking models.Booking
